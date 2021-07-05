@@ -8,6 +8,6 @@ export default class Bishop extends Piece {
     }
 
     getAvailableMoves(board) {
-        return this.getDiagonalMoves(board);
+        return this.getDiagonalMoves(board).filter(square => this.moveIsUnobstructed(board, square, true));
     }
 }

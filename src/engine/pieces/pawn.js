@@ -7,28 +7,34 @@ export default class Pawn extends Piece {
         this.pieceType = "pawn";
     }
 
-    getAvailableMoves(board) {
-        const currentSquare = board.findPiece(this);
-        const direction = this.player === Player.WHITE ? 1 : -1;
+    getStandardMoves(board, currentSquare, direction) {
         const isFirstMove = (this.player === Player.WHITE && currentSquare.row === 1) || (this.player === Player.BLACK && currentSquare.row === 6);
         const moveOne = currentSquare.moveBy(direction, 0);
 
-        if (isFirstMove) {
-            let moves = [];
-            const canMoveOne = this.canLandAt(board, moveOne, false);
-            if (canMoveOne) moves.push(moveOne);
-            const moveTwo = currentSquare.moveBy(2 * direction, 0);
-            const canMoveTwo = this.moveIsUnobstructed(board, moveTwo, false);
-            const canTakeTwo = !canMoveOne && this.canLandAt(board, moveOne, true) && this.canLandAt(board, moveTwo, false);
-            if (canMoveTwo || canTakeTwo) moves.push(moveTwo);
-            return moves;
-        } else if (moveOne.isValid()) {
-            if (this.canLandAt(board, moveOne, false)) return [moveOne];
-            else if (this.canLandAt(board, moveOne, true)) {
-                const takeMove = currentSquare.moveBy(2 * direction, 0);
-                if (takeMove.isValid() && this.canLandAt(board, takeMove, false)) return [takeMove];
-                else return [];
-            } else return [];
-        } else return [];
+        let allMoves;
+        if (isFirstMove) allMoves = [moveOne, currentSquare.moveBy(2 * direction, 0)];
+        else if (moveOne.isValid()) allMoves = [moveOne];
+        else allMoves = [];
+
+        return allMoves.filter(square => this.moveIsUnobstructed(board, square, false));
+    }
+
+    checkTakeMove(board, square) {
+        return square.isValid() && !this.canLandAt(board, square, false) && this.canLandAt(board, square, true);
+    }
+
+    getTakeMoves(board, currentSquare, direction) {
+        const takeMoves = [currentSquare.moveBy(direction, 1), currentSquare.moveBy(direction, -1)];
+        return takeMoves.filter(square => this.checkTakeMove(board, square));
+    }
+
+    getAvailableMoves(board) {
+        const currentSquare = board.findPiece(this);
+        const direction = this.player === Player.WHITE ? 1 : -1;
+
+        const standardMoves = this.getStandardMoves(board, currentSquare, direction);
+        const takeMoves = this.getTakeMoves(board, currentSquare, direction);
+
+        return standardMoves.concat(takeMoves);
     }
 }

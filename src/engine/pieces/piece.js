@@ -52,6 +52,13 @@ export default class Piece {
         return otherPiece.player !== this.player && otherPiece.pieceType !== "king";
     }
 
+    canLandAt(board, square, allowCapture) {
+        const pieceAtNewSquare = board.getPiece(square);
+        if (!pieceAtNewSquare) return true;
+        else if (allowCapture && this.canTakePiece(pieceAtNewSquare)) return true;
+        else return false;
+    }
+
     moveIsUnobstructed(board, newSquare, allowCapture) {
         const currentSquare = board.findPiece(this);
         const [rowDir, colDir] = currentSquare.getMoveDirection(newSquare);
@@ -60,9 +67,6 @@ export default class Piece {
             if (board.getPiece(square)) return false;
             square = square.moveBy(rowDir, colDir);
         }
-        const pieceAtNewSquare = board.getPiece(square);
-        if (!pieceAtNewSquare) return true;
-        else if (allowCapture && this.canTakePiece(pieceAtNewSquare)) return true;
-        else return false;
+        return this.canLandAt(board, square, allowCapture);
     }
 }

@@ -23,9 +23,6 @@ export default class Knight extends Piece {
     getAvailableMoves(board) {
         const allMoves = this.getAllMoves(board);
         const validMoves = allMoves.filter(square => square.isValid());
-        return validMoves.filter(square => {
-            const pieceAtNewSquare = board.getPiece(square);
-            return !pieceAtNewSquare || this.canTakePiece(pieceAtNewSquare);
-        });
+        return validMoves.filter(square => this.canLandAt(board, square, true));
     }
 }

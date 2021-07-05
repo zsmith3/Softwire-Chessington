@@ -6,6 +6,17 @@ export default class Knight extends Piece {
     }
 
     getAvailableMoves(board) {
-        return new Array(0);
+        const currentSquare = board.findPiece(this);
+        let allMoves = [];
+        allMoves.push(currentSquare.moveBy(-2, -1));
+        allMoves.push(currentSquare.moveBy(-2, 1));
+        allMoves.push(currentSquare.moveBy(-1, -2));
+        allMoves.push(currentSquare.moveBy(-1, 2));
+        allMoves.push(currentSquare.moveBy(1, -2));
+        allMoves.push(currentSquare.moveBy(1, 2));
+        allMoves.push(currentSquare.moveBy(2, -1));
+        allMoves.push(currentSquare.moveBy(2, 1));
+
+        return allMoves.filter(square => square.isValid());
     }
 }

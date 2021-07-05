@@ -1,5 +1,6 @@
 import Piece from './piece';
 import Player from "../player";
+import Square from "../square";
 
 export default class Pawn extends Piece {
     constructor(player) {
@@ -45,5 +46,13 @@ export default class Pawn extends Piece {
         const enPassantMoves = this.getEnPassant(board, currentSquare, direction);
 
         return standardMoves.concat(takeMoves).concat(enPassantMoves);
+    }
+
+    detectEnPassant(board, fromSquare, toSquare) {
+        // NOTE this assumes the move is valid
+        const rowDiff = Math.abs(toSquare.row - fromSquare.row);
+        const colDiff = Math.abs(toSquare.col - fromSquare.col);
+        if (rowDiff && colDiff && !this.canTakeAtSquare(board, toSquare)) return true;
+        else return false;
     }
 }

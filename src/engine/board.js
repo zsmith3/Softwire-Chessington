@@ -43,8 +43,15 @@ export default class Board {
         else {
             this.setPiece(toSquare, movingPiece);
             this.setPiece(fromSquare, undefined);
+            this.specialMoveActions(movingPiece, fromSquare, toSquare);
             this.currentPlayer = (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE);
             this.lastMovedPiece = movingPiece;
+        }
+    }
+
+    specialMoveActions(movingPiece, fromSquare, toSquare) {
+        if (movingPiece.pieceType === "pawn" && movingPiece.detectEnPassant(this, fromSquare, toSquare)) {
+            this.setPiece(Square.at(fromSquare.row, toSquare.col), undefined);
         }
     }
 }

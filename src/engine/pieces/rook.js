@@ -8,6 +8,6 @@ export default class Rook extends Piece {
     }
 
     getAvailableMoves(board) {
-        return this.getLateralMoves(board);
+        return this.getLateralMoves(board).filter(square => this.moveIsUnobstructed(board, square, true));
     }
 }

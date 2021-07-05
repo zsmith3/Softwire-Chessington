@@ -46,4 +46,15 @@ export default class Piece {
         }
         return diagonalMoves;
     }
+
+    moveIsUnobstructed(board, newSquare, includeNewSquare) {
+        const currentSquare = board.findPiece(this);
+        const [rowDir, colDir] = currentSquare.getMoveDirection(newSquare);
+        let square = currentSquare.moveBy(rowDir, colDir);
+        while (!square.equals(newSquare)) {
+            if (board.getPiece(square)) return false;
+            square = square.moveBy(rowDir, colDir);
+        }
+        return includeNewSquare ? !board.getPiece(square) : true;
+    }
 }

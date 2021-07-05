@@ -6,11 +6,15 @@ export default class Pawn extends Piece {
         super(player);
     }
 
-    getAvailableMoves(board) {
+    getAllMoves(board) {
         const currentSquare = board.findPiece(this);
         const direction = this.player === Player.WHITE ? 1 : -1;
         const isFirstMove = (this.player === Player.WHITE && currentSquare.row === 1) || (this.player === Player.BLACK && currentSquare.row === 6);
         if (isFirstMove) return [currentSquare.moveBy(direction, 0), currentSquare.moveBy(2 * direction, 0)];
         else return [currentSquare.moveBy(direction, 0)];
+    }
+
+    getAvailableMoves(board) {
+        return this.getAllMoves(board).filter(square => this.moveIsUnobstructed(board, square, true));
     }
 }

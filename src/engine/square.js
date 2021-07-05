@@ -28,6 +28,14 @@ export default class Square {
         return rowDiff <= 1 && colDiff <= 1 && rowDiff + colDiff > 0;
     }
 
+    getMoveDirection(otherSquare) {
+        const rowDiff = otherSquare.row - this.row;
+        const rowDir = rowDiff / (Math.abs(rowDiff) || 1);
+        const colDiff = otherSquare.col - this.col;
+        const colDir = colDiff / (Math.abs(colDiff) || 1);
+        return [rowDir, colDir];
+    }
+
     toString() {
         return `Row ${this.row}, Col ${this.col}`;
     }

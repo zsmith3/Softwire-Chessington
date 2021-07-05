@@ -12,6 +12,10 @@ export default class Square {
         return !!otherSquare && this.row === otherSquare.row && this.col === otherSquare.col;
     }
 
+    moveBy(row, col) {
+        return new Square(this.row + row, this.col + col);
+    }
+
     toString() {
         return `Row ${this.row}, Col ${this.col}`;
     }

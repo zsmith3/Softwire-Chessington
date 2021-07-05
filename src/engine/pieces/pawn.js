@@ -9,6 +9,8 @@ export default class Pawn extends Piece {
     getAvailableMoves(board) {
         const currentSquare = board.findPiece(this);
         const direction = this.player === Player.WHITE ? 1 : -1;
-        return { row: currentSquare.row + direction, col: currentSquare.col };
+        const isFirstMove = (this.player === Player.WHITE && currentSquare.row === 1) || (this.player === Player.BLACK && currentSquare.row === 6);
+        if (isFirstMove) return [currentSquare.moveBy(direction, 0), currentSquare.moveBy(2 * direction, 0)];
+        else return [currentSquare.moveBy(direction, 0)];
     }
 }

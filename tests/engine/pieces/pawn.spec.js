@@ -85,6 +85,44 @@ describe('Pawn', () => {
 
             moves.should.not.deep.include(Square.at(2, 4));
         });
+
+        it('can take opposing pawn en passant', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(4, 3), pawn);
+
+            const opposingPawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(6, 4), opposingPawn);
+            opposingPawn.moveTo(board, Square.at(4, 4));
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.deep.include(Square.at(5, 4));
+        });
+
+        it('cannot take opposing non-pawns en passant', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(4, 3), pawn);
+
+            const opposingPiece = new Rook(Player.BLACK);
+            board.setPiece(Square.at(6, 4), opposingPiece);
+            opposingPiece.moveTo(board, Square.at(4, 4));
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.not.deep.include(Square.at(5, 4));
+        });
+
+        it('cannot take opposing pawns en passant when not allowed', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(4, 3), pawn);
+
+            const opposingPawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(4, 4), opposingPawn);
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.not.deep.include(Square.at(5, 4));
+        });
     });
 
     describe('black pawns', () => {
@@ -163,6 +201,44 @@ describe('Pawn', () => {
             const moves = pawn.getAvailableMoves(board);
 
             moves.should.not.deep.include(Square.at(5, 4));
+        });
+
+        it('can take opposing pawn en passant', () => {
+            const pawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(3, 3), pawn);
+
+            const opposingPawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(1, 4), opposingPawn);
+            opposingPawn.moveTo(board, Square.at(3, 4));
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.deep.include(Square.at(2, 4));
+        });
+
+        it('cannot take opposing non-pawns en passant', () => {
+            const pawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(3, 3), pawn);
+
+            const opposingPiece = new Rook(Player.WHITE);
+            board.setPiece(Square.at(1, 4), opposingPiece);
+            opposingPiece.moveTo(board, Square.at(3, 4));
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.not.deep.include(Square.at(2, 4));
+        });
+
+        it('cannot take opposing pawns en passant when not allowed', () => {
+            const pawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(3, 3), pawn);
+
+            const opposingPawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(1, 4), opposingPawn);
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.not.deep.include(Square.at(2, 4));
         });
     });
 

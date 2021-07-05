@@ -6,18 +6,26 @@ export default class Knight extends Piece {
         this.pieceType = "knight";
     }
 
-    getAvailableMoves(board) {
+    getAllMoves(board) {
         const currentSquare = board.findPiece(this);
-        let allMoves = [];
-        allMoves.push(currentSquare.moveBy(-2, -1));
-        allMoves.push(currentSquare.moveBy(-2, 1));
-        allMoves.push(currentSquare.moveBy(-1, -2));
-        allMoves.push(currentSquare.moveBy(-1, 2));
-        allMoves.push(currentSquare.moveBy(1, -2));
-        allMoves.push(currentSquare.moveBy(1, 2));
-        allMoves.push(currentSquare.moveBy(2, -1));
-        allMoves.push(currentSquare.moveBy(2, 1));
+        return [
+            currentSquare.moveBy(-2, -1),
+            currentSquare.moveBy(-2, 1),
+            currentSquare.moveBy(-1, -2),
+            currentSquare.moveBy(-1, 2),
+            currentSquare.moveBy(1, -2),
+            currentSquare.moveBy(1, 2),
+            currentSquare.moveBy(2, -1),
+            currentSquare.moveBy(2, 1)
+        ];
+    }
 
-        return allMoves.filter(square => square.isValid());
+    getAvailableMoves(board) {
+        const allMoves = this.getAllMoves(board);
+        const validMoves = allMoves.filter(square => square.isValid());
+        return validMoves.filter(square => {
+            const pieceAtNewSquare = board.getPiece(square);
+            return !pieceAtNewSquare || this.canTakePiece(pieceAtNewSquare);
+        });
     }
 }

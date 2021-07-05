@@ -1,5 +1,6 @@
 import Piece from './piece';
 import GameSettings from "../gameSettings";
+import Square from "../square";
 
 export default class Rook extends Piece {
     constructor(player) {
@@ -8,12 +9,12 @@ export default class Rook extends Piece {
 
     getHorizontalMoves(currentSquare) {
         const cols = [...Array(GameSettings.BOARD_SIZE).keys()].filter(i => i !== currentSquare.col);
-        return cols.map(col => ({row: currentSquare.row, col: col}));
+        return cols.map(col => Square.at(currentSquare.row, col));
     }
 
     getVerticalMoves(currentSquare) {
         const rows = [...Array(GameSettings.BOARD_SIZE).keys()].filter(i => i !== currentSquare.row);
-        return rows.map(row => ({row: row, col:  currentSquare.col}));
+        return rows.map(row => Square.at(row, currentSquare.col));
     }
 
     getAvailableMoves(board) {

@@ -13,7 +13,7 @@ export default class Square {
     }
 
     moveBy(row, col) {
-        return new Square(this.row + row, this.col + col);
+        return Square.at(this.row + row, this.col + col);
     }
 
     toString() {

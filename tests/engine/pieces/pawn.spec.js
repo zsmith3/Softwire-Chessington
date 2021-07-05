@@ -111,7 +111,7 @@ describe('Pawn', () => {
 
         const moves = pawn.getAvailableMoves(board);
 
-        moves.should.include(Square.at(4, 3));
+        moves.should.deep.include(Square.at(4, 3));
     });
 
     it('cannot leave board', () => {

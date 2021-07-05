@@ -1,6 +1,5 @@
 import Piece from './piece';
 import Player from "../player";
-import GameSettings from "../gameSettings";
 
 export default class Pawn extends Piece {
     constructor(player) {
@@ -8,18 +7,28 @@ export default class Pawn extends Piece {
         this.pieceType = "pawn";
     }
 
-    getAllMoves(board) {
+    getAvailableMoves(board) {
         const currentSquare = board.findPiece(this);
         const direction = this.player === Player.WHITE ? 1 : -1;
         const isFirstMove = (this.player === Player.WHITE && currentSquare.row === 1) || (this.player === Player.BLACK && currentSquare.row === 6);
-        const newRow = currentSquare.row + direction;
-        const canMove = newRow >= 0 && newRow < GameSettings.BOARD_SIZE;
-        if (isFirstMove) return [currentSquare.moveBy(direction, 0), currentSquare.moveBy(2 * direction, 0)];
-        else if (canMove) return [currentSquare.moveBy(direction, 0)];
-        else return [];
-    }
+        const moveOne = currentSquare.moveBy(direction, 0);
 
-    getAvailableMoves(board) {
-        return this.getAllMoves(board).filter(square => this.moveIsUnobstructed(board, square, false));
+        if (isFirstMove) {
+            let moves = [];
+            const canMoveOne = this.canLandAt(board, moveOne, false);
+            if (canMoveOne) moves.push(moveOne);
+            const moveTwo = currentSquare.moveBy(2 * direction, 0);
+            const canMoveTwo = this.moveIsUnobstructed(board, moveTwo, false);
+            const canTakeTwo = !canMoveOne && this.canLandAt(board, moveOne, true) && this.canLandAt(board, moveTwo, false);
+            if (canMoveTwo || canTakeTwo) moves.push(moveTwo);
+            return moves;
+        } else if (moveOne.isValid()) {
+            if (this.canLandAt(board, moveOne, false)) return [moveOne];
+            else if (this.canLandAt(board, moveOne, true)) {
+                const takeMove = currentSquare.moveBy(2 * direction, 0);
+                if (takeMove.isValid() && this.canLandAt(board, takeMove, false)) return [takeMove];
+                else return [];
+            } else return [];
+        } else return [];
     }
 }

@@ -5,6 +5,7 @@ import Square from "../square";
 export default class Bishop extends Piece {
     constructor(player) {
         super(player);
+        this.pieceType = "bishop";
     }
 
     getAvailableMoves(board) {

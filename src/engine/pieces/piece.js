@@ -4,6 +4,7 @@ import Square from "../square";
 export default class Piece {
     constructor(player) {
         this.player = player;
+        this.pieceType = null;
     }
 
     getAvailableMoves(board) {
@@ -47,7 +48,11 @@ export default class Piece {
         return diagonalMoves;
     }
 
-    moveIsUnobstructed(board, newSquare, includeNewSquare) {
+    canTakePiece(otherPiece) {
+        return otherPiece.player !== this.player && otherPiece.pieceType !== "king";
+    }
+
+    moveIsUnobstructed(board, newSquare, allowCapture) {
         const currentSquare = board.findPiece(this);
         const [rowDir, colDir] = currentSquare.getMoveDirection(newSquare);
         let square = currentSquare.moveBy(rowDir, colDir);
@@ -55,6 +60,9 @@ export default class Piece {
             if (board.getPiece(square)) return false;
             square = square.moveBy(rowDir, colDir);
         }
-        return includeNewSquare ? !board.getPiece(square) : true;
+        const pieceAtNewSquare = board.getPiece(square);
+        if (!pieceAtNewSquare) return true;
+        else if (allowCapture && this.canTakePiece(pieceAtNewSquare)) return true;
+        else return false;
     }
 }

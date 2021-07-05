@@ -5,6 +5,7 @@ import GameSettings from "../gameSettings";
 export default class Pawn extends Piece {
     constructor(player) {
         super(player);
+        this.pieceType = "pawn";
     }
 
     getAllMoves(board) {
@@ -19,6 +20,6 @@ export default class Pawn extends Piece {
     }
 
     getAvailableMoves(board) {
-        return this.getAllMoves(board).filter(square => this.moveIsUnobstructed(board, square, true));
+        return this.getAllMoves(board).filter(square => this.moveIsUnobstructed(board, square, false));
     }
 }

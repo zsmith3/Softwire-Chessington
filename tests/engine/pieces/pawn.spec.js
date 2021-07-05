@@ -4,6 +4,7 @@ import Rook from '../../../src/engine/pieces/rook';
 import Board from '../../../src/engine/board';
 import Player from '../../../src/engine/player';
 import Square from '../../../src/engine/square';
+import King from "../../../src/engine/pieces/king";
 
 describe('Pawn', () => {
 
@@ -88,7 +89,7 @@ describe('Pawn', () => {
 
         const moves = pawn.getAvailableMoves(board);
 
-        moves.should.be.empty;
+        moves.should.not.deep.include(Square.at(5, 3));
     });
 
     it('cannot move two squares if there is a piece two sqaures in front', () => {
@@ -102,4 +103,47 @@ describe('Pawn', () => {
         moves.should.not.deep.include(Square.at(4, 3));
     });
 
+    it('can take opposing pieces', () => {
+        const pawn = new Pawn(Player.BLACK);
+        const blockingPiece = new Rook(Player.WHITE);
+        board.setPiece(Square.at(6, 3), pawn);
+        board.setPiece(Square.at(5, 3), blockingPiece);
+
+        const moves = pawn.getAvailableMoves(board);
+
+        moves.should.include(Square.at(4, 3));
+    });
+
+    it('cannot leave board', () => {
+        const pawn = new Pawn(Player.BLACK);
+        const blockingPiece = new Rook(Player.WHITE);
+        board.setPiece(Square.at(1, 3), pawn);
+        board.setPiece(Square.at(0, 3), blockingPiece);
+
+        const moves = pawn.getAvailableMoves(board);
+
+        moves.should.be.empty;
+    });
+
+    it('cannot take opposing king', () => {
+        const pawn = new Pawn(Player.BLACK);
+        const blockingPiece = new King(Player.WHITE);
+        board.setPiece(Square.at(6, 3), pawn);
+        board.setPiece(Square.at(5, 3), blockingPiece);
+
+        const moves = pawn.getAvailableMoves(board);
+
+        moves.should.be.empty;
+    });
+
+    it('cannot take friendly pieces', () => {
+        const pawn = new Pawn(Player.BLACK);
+        const blockingPiece = new Rook(Player.BLACK);
+        board.setPiece(Square.at(6, 3), pawn);
+        board.setPiece(Square.at(5, 3), blockingPiece);
+
+        const moves = pawn.getAvailableMoves(board);
+
+        moves.should.be.empty;
+    });
 });

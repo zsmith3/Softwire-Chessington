@@ -5,6 +5,7 @@ export default class Piece {
     constructor(player) {
         this.player = player;
         this.pieceType = null;
+        this.history = [];
     }
 
     getAvailableMoves(board) {
@@ -14,6 +15,7 @@ export default class Piece {
     moveTo(board, newSquare) {
         const currentSquare = board.findPiece(this);
         board.movePiece(currentSquare, newSquare);
+        this.history.push(currentSquare);
     }
 
     getHorizontalMoves(currentSquare) {
@@ -57,6 +59,11 @@ export default class Piece {
         if (!pieceAtNewSquare) return true;
         else if (allowCapture && this.canTakePiece(pieceAtNewSquare)) return true;
         else return false;
+    }
+
+    canTakeAtSquare(board, square) {
+        const pieceAtNewSquare = board.getPiece(square);
+        return pieceAtNewSquare && this.canTakePiece(pieceAtNewSquare);
     }
 
     moveIsUnobstructed(board, newSquare, allowCapture) {

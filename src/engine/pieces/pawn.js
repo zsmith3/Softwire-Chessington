@@ -19,13 +19,21 @@ export default class Pawn extends Piece {
         return allMoves.filter(square => this.moveIsUnobstructed(board, square, false));
     }
 
-    checkTakeMove(board, square) {
-        return square.isValid() && !this.canLandAt(board, square, false) && this.canLandAt(board, square, true);
-    }
-
     getTakeMoves(board, currentSquare, direction) {
         const takeMoves = [currentSquare.moveBy(direction, 1), currentSquare.moveBy(direction, -1)];
-        return takeMoves.filter(square => this.checkTakeMove(board, square));
+        return takeMoves.filter(square => square.isValid() && this.canTakeAtSquare(board, square));
+    }
+
+    getEnPassant(board, currentSquare, direction) {
+        const horizontalAdjacentSquares = [currentSquare.moveBy(0, -1), currentSquare.moveBy(0, 1)];
+        const possibleEnPassantSquares = horizontalAdjacentSquares.filter(square => {
+            if (!square.isValid() || !this.canTakeAtSquare(board, square)) return false;
+            const piece = board.getPiece(square);
+            if (piece.pieceType !== "pawn") return false;
+            const pieceLast = piece.history[piece.history.length - 1];
+            return board.lastMovedPiece === piece && pieceLast.equals(square.moveBy(2 * direction, 0));
+        });
+        return possibleEnPassantSquares.map(square => square.moveBy(direction, 0));
     }
 
     getAvailableMoves(board) {
@@ -34,7 +42,8 @@ export default class Pawn extends Piece {
 
         const standardMoves = this.getStandardMoves(board, currentSquare, direction);
         const takeMoves = this.getTakeMoves(board, currentSquare, direction);
+        const enPassantMoves = this.getEnPassant(board, currentSquare, direction);
 
-        return standardMoves.concat(takeMoves);
+        return standardMoves.concat(takeMoves).concat(enPassantMoves);
     }
 }

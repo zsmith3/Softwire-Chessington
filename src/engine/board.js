@@ -6,6 +6,7 @@ export default class Board {
     constructor(currentPlayer) {
         this.currentPlayer = currentPlayer ? currentPlayer : Player.WHITE;
         this.board = this.createBoard();
+        this.lastMovedPiece = null;
     }
 
     createBoard() {
@@ -36,11 +37,14 @@ export default class Board {
     }
 
     movePiece(fromSquare, toSquare) {
-        const movingPiece = this.getPiece(fromSquare);        
-        if (!!movingPiece && movingPiece.player === this.currentPlayer) {
+        const movingPiece = this.getPiece(fromSquare);
+        if (!movingPiece) throw `No piece at square ${fromSquare}`;
+        else if (movingPiece.player !== this.currentPlayer) throw "Cannot move piece belonging to wrong player";
+        else {
             this.setPiece(toSquare, movingPiece);
             this.setPiece(fromSquare, undefined);
             this.currentPlayer = (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE);
+            this.lastMovedPiece = movingPiece;
         }
     }
 }

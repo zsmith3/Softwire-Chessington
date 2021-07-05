@@ -88,7 +88,8 @@ describe('Pawn', () => {
 
         it('can take opposing pawn en passant', () => {
             const pawn = new Pawn(Player.WHITE);
-            board.setPiece(Square.at(4, 3), pawn);
+            board.setPiece(Square.at(3, 3), pawn);
+            pawn.moveTo(board, Square.at(4, 3));
 
             const opposingPawn = new Pawn(Player.BLACK);
             board.setPiece(Square.at(6, 4), opposingPawn);
@@ -101,7 +102,8 @@ describe('Pawn', () => {
 
         it('cannot take opposing non-pawns en passant', () => {
             const pawn = new Pawn(Player.WHITE);
-            board.setPiece(Square.at(4, 3), pawn);
+            board.setPiece(Square.at(3, 3), pawn);
+            pawn.moveTo(board, Square.at(4, 3));
 
             const opposingPiece = new Rook(Player.BLACK);
             board.setPiece(Square.at(6, 4), opposingPiece);
@@ -205,7 +207,8 @@ describe('Pawn', () => {
 
         it('can take opposing pawn en passant', () => {
             const pawn = new Pawn(Player.BLACK);
-            board.setPiece(Square.at(3, 3), pawn);
+            board.setPiece(Square.at(4, 3), pawn);
+            pawn.moveTo(board, Square.at(3, 3));
 
             const opposingPawn = new Pawn(Player.WHITE);
             board.setPiece(Square.at(1, 4), opposingPawn);
@@ -218,7 +221,8 @@ describe('Pawn', () => {
 
         it('cannot take opposing non-pawns en passant', () => {
             const pawn = new Pawn(Player.BLACK);
-            board.setPiece(Square.at(3, 3), pawn);
+            board.setPiece(Square.at(4, 3), pawn);
+            pawn.moveTo(board, Square.at(3, 3));
 
             const opposingPiece = new Rook(Player.WHITE);
             board.setPiece(Square.at(1, 4), opposingPiece);

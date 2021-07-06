@@ -82,4 +82,8 @@ export default class Board {
         document.getElementById("piece-chooser").style.display = "none";
         this.pawnPromotionSquare = null;
     }
+
+    detectCheck(player) {
+        return false;
+    }
 }

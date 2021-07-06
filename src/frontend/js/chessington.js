@@ -73,18 +73,26 @@ function onDrop(source, target) {
     updateStatus();
 }
 
+function updateCheckStatus() {
+    const playerStr = board.currentPlayer === Player.WHITE ? 'White' : 'Black';
+    const checkStatus = document.getElementById('check-status');
+    const inCheck = board.detectCheck(board.kings[playerStr]);
+    const inStalemate = board.detectStaleMate(board.kings[playerStr]);
+    if (inStalemate && inCheck) {
+        checkStatus.innerHTML = `${playerStr} in checkmate`;
+        document.getElementById("chess-board").style.pointerEvents = "none";
+    } else if (inCheck) {
+        checkStatus.innerHTML = `${playerStr} in check`;
+    } else if (inStalemate) {
+        checkStatus.innerHTML = `Stalemate`;
+    } else checkStatus.innerHTML = '';
+}
+
 function updateStatus() {
     const player = board.currentPlayer === Player.WHITE ? 'White' : 'Black';
     document.getElementById('turn-status').innerHTML = `${player} to move`;
 
-    for (let player of [Player.WHITE, Player.BLACK]) {
-        const playerStr = player === Player.WHITE ? 'White' : 'Black';
-        const checkStatus = document.getElementById('check-status');
-        if (board.detectCheck(board.kings[playerStr])) {
-            checkStatus.innerHTML = `${playerStr} in check`;
-            break;
-        } else checkStatus.innerHTML = '';
-    }
+    updateCheckStatus();
 }
 
 function boardInStartingPosition() {

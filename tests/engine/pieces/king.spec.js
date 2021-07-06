@@ -138,4 +138,17 @@ describe('King', () => {
 
         moves.should.not.deep.include(Square.at(0, 2));
     });
+
+    it('cannot move into check', () => {
+        const king = new King(Player.WHITE);
+        const opposingPiece = new Rook(Player.BLACK);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(1, 1), opposingPiece);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(1, 4));
+        moves.should.not.deep.include(Square.at(1, 3));
+        moves.should.not.deep.include(Square.at(1, 5));
+    });
 });

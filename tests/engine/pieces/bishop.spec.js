@@ -91,4 +91,17 @@ describe('Bishop', () => {
 
         moves.should.not.deep.include(Square.at(6, 6));
     });
+
+    it('cannot move into check', () => {
+        const king = new King(Player.WHITE);
+        const bishop = new Bishop(Player.WHITE);
+        const opposingPiece = new Rook(Player.BLACK);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 3), bishop);
+        board.setPiece(Square.at(0, 1), opposingPiece);
+
+        const moves = bishop.getAvailableMoves(board);
+
+        moves.should.be.empty;
+    });
 });

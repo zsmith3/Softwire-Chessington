@@ -108,4 +108,17 @@ describe('Queen', () => {
 
         moves.should.not.deep.include(Square.at(4, 6));
     });
+
+    it('cannot move into check', () => {
+        const king = new King(Player.WHITE);
+        const queen = new Queen(Player.WHITE);
+        const opposingPiece = new Rook(Player.BLACK);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 3), queen);
+        board.setPiece(Square.at(0, 1), opposingPiece);
+
+        const moves = queen.getAvailableMoves(board);
+
+        moves.filter(square => square.row !== 0).should.be.empty;
+    });
 });

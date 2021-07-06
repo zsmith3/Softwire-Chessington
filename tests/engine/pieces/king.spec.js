@@ -5,6 +5,7 @@ import Player from '../../../src/engine/player';
 import Square from '../../../src/engine/square';
 import Rook from "../../../src/engine/pieces/rook";
 import Pawn from "../../../src/engine/pieces/pawn";
+import Queen from "../../../src/engine/pieces/queen";
 
 describe('King', () => {
 
@@ -76,5 +77,65 @@ describe('King', () => {
         const moves = king.getAvailableMoves(board);
 
         moves.should.not.deep.include(Square.at(4, 5));
+    });
+
+    it('can castle queenside', () => {
+        const king = new King(Player.WHITE);
+        const rook = new Rook(Player.WHITE);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 0), rook);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.deep.include(Square.at(0, 2));
+    });
+
+    it('can castle kingside', () => {
+        const king = new King(Player.WHITE);
+        const rook = new Rook(Player.WHITE);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 7), rook);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.deep.include(Square.at(0, 6));
+    });
+
+    it('cannot castle if already moved', () => {
+        const king = new King(Player.WHITE);
+        const rook = new Rook(Player.WHITE);
+        const opposingPiece = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 0), rook);
+        board.setPiece(Square.at(4, 4), opposingPiece);
+        king.moveTo(board, Square.at(1, 4));
+        opposingPiece.moveTo(board, Square.at(3, 4));
+        king.moveTo(board, Square.at(0, 4));
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(0, 2));
+    });
+
+    it('cannot castle if piece in between', () => {
+        const king = new King(Player.WHITE);
+        const rook = new Rook(Player.WHITE);
+        const queen = new Queen(Player.WHITE);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 0), rook);
+        board.setPiece(Square.at(0, 3), queen);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(0, 2));
+    });
+
+    it('cannot castle without rook', () => {
+        const king = new King(Player.WHITE);
+        board.setPiece(Square.at(0, 4), king);
+
+        const moves = king.getAvailableMoves(board);
+
+        moves.should.not.deep.include(Square.at(0, 2));
     });
 });

@@ -112,4 +112,68 @@ describe('Board', () => {
 
         board.detectCheck(king).should.equal(false);
     });
+
+    it('can detect checkmate', () => {
+        const king = new King(Player.WHITE, board);
+        board.setPiece(Square.at(0, 4), king);
+
+        const pawn1 = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(1, 3), pawn1);
+        const pawn2 = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(1, 2), pawn2);
+        const rook = new Rook(Player.BLACK);
+        board.setPiece(Square.at(1, 7), rook);
+        const bishop = new Bishop(Player.BLACK);
+        board.setPiece(Square.at(2, 7), bishop)
+
+        board.detectCheckMate(king).should.equal(true);
+    });
+
+    it('can detect stalemate', () => {
+        const king = new King(Player.WHITE, board);
+        board.setPiece(Square.at(0, 4), king);
+
+        const pawn = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(1, 2), pawn);
+        const rook = new Rook(Player.BLACK);
+        board.setPiece(Square.at(1, 7), rook);
+        const bishop = new Bishop(Player.BLACK);
+        board.setPiece(Square.at(2, 7), bishop)
+
+        board.detectStaleMate(king).should.equal(true);
+    });
+
+    it('does not detect checkmate when only in check', () => {
+        const king = new King(Player.WHITE, board);
+        board.setPiece(Square.at(0, 4), king);
+
+        const pawn = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(1, 3), pawn);
+
+        board.detectCheckMate(king).should.equal(false);
+    });
+
+    it('does not detect checkmate when only in stalemate', () => {
+        const king = new King(Player.WHITE, board);
+        board.setPiece(Square.at(0, 4), king);
+
+        const pawn = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(1, 2), pawn);
+        const rook = new Rook(Player.BLACK);
+        board.setPiece(Square.at(1, 7), rook);
+        const bishop = new Bishop(Player.BLACK);
+        board.setPiece(Square.at(2, 7), bishop)
+
+        board.detectCheckMate(king).should.equal(false);
+    });
+
+    it('does not detect stalemate when not in stalemate', () => {
+        const king = new King(Player.WHITE, board);
+        board.setPiece(Square.at(0, 4), king);
+
+        const pawn = new Pawn(Player.BLACK);
+        board.setPiece(Square.at(1, 3), pawn);
+
+        board.detectStaleMate(king).should.equal(false);
+    });
 });

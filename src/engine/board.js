@@ -127,9 +127,7 @@ export default class Board {
         return newBoard;
     }
 
-    detectCheckMate(king) {
-        if (!this.detectCheck(king)) return false;
-
+    detectStaleMate(king) {
         for (let row = 0; row < this.board.length; row++) {
             for (let col = 0; col < this.board[row].length; col++) {
                 const piece = this.board[row][col];
@@ -140,5 +138,11 @@ export default class Board {
             }
         }
         return true;
+    }
+
+    detectCheckMate(king) {
+        if (!this.detectCheck(king)) return false;
+
+        return this.detectStaleMate(king);
     }
 }

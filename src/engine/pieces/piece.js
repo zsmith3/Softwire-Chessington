@@ -50,23 +50,23 @@ export default class Piece {
         return diagonalMoves;
     }
 
-    canTakePiece(otherPiece) {
-        return otherPiece.player !== this.player && otherPiece.pieceType !== "king";
+    canTakePiece(otherPiece, allowTakeKing) {
+        return otherPiece.player !== this.player && (allowTakeKing || otherPiece.pieceType !== "king");
     }
 
-    canLandAt(board, square, allowCapture) {
+    canLandAt(board, square, allowCapture, allowTakeKing) {
         const pieceAtNewSquare = board.getPiece(square);
         if (!pieceAtNewSquare) return true;
-        else if (allowCapture && this.canTakePiece(pieceAtNewSquare)) return true;
+        else if (allowCapture && this.canTakePiece(pieceAtNewSquare, allowTakeKing)) return true;
         else return false;
     }
 
-    canTakeAtSquare(board, square) {
+    canTakeAtSquare(board, square, allowTakeKing) {
         const pieceAtNewSquare = board.getPiece(square);
-        return pieceAtNewSquare && this.canTakePiece(pieceAtNewSquare);
+        return pieceAtNewSquare && this.canTakePiece(pieceAtNewSquare, allowTakeKing);
     }
 
-    moveIsUnobstructed(board, newSquare, allowCapture) {
+    moveIsUnobstructed(board, newSquare, allowCapture, allowTakeKing) {
         const currentSquare = board.findPiece(this);
         const [rowDir, colDir] = currentSquare.getMoveDirection(newSquare);
         let square = currentSquare.moveBy(rowDir, colDir);
@@ -74,6 +74,6 @@ export default class Piece {
             if (board.getPiece(square)) return false;
             square = square.moveBy(rowDir, colDir);
         }
-        return this.canLandAt(board, square, allowCapture);
+        return this.canLandAt(board, square, allowCapture, allowTakeKing);
     }
 }

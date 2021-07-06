@@ -8,7 +8,7 @@ export default class Bishop extends Piece {
         this.pieceType = "bishop";
     }
 
-    getAvailableMoves(board) {
-        return this.getDiagonalMoves(board).filter(square => this.moveIsUnobstructed(board, square, true));
+    getAvailableMoves(board, allowTakeKing) {
+        return this.getDiagonalMoves(board).filter(square => this.moveIsUnobstructed(board, square, true, allowTakeKing));
     }
 }

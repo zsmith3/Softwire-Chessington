@@ -76,6 +76,15 @@ function onDrop(source, target) {
 function updateStatus() {
     const player = board.currentPlayer === Player.WHITE ? 'White' : 'Black';
     document.getElementById('turn-status').innerHTML = `${player} to move`;
+
+    for (let player of [Player.WHITE, Player.BLACK]) {
+        const playerStr = player === Player.WHITE ? 'White' : 'Black';
+        const checkStatus = document.getElementById('check-status');
+        if (board.detectCheck(King.kings[playerStr])) {
+            checkStatus.innerHTML = `${playerStr} in check`;
+            break;
+        } else checkStatus.innerHTML = '';
+    }
 }
 
 function boardInStartingPosition() {

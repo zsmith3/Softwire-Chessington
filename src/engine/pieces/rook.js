@@ -8,7 +8,7 @@ export default class Rook extends Piece {
         this.pieceType = "rook";
     }
 
-    getAvailableMoves(board) {
-        return this.getLateralMoves(board).filter(square => this.moveIsUnobstructed(board, square, true));
+    getAvailableMoves(board, allowTakeKing) {
+        return this.getLateralMoves(board).filter(square => this.moveIsUnobstructed(board, square, true, allowTakeKing));
     }
 }

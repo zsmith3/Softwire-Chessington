@@ -6,7 +6,10 @@ export default class Queen extends Piece {
         this.pieceType = "queen";
     }
 
-    getAvailableMoves(board) {
-        return this.getLateralMoves(board).concat(this.getDiagonalMoves(board)).filter(square => this.moveIsUnobstructed(board, square, true));
+    getAvailableMoves(board, allowTakeKing) {
+        const lateralMoves = this.getLateralMoves(board);
+        const diagonalMoves = this.getDiagonalMoves(board);
+        const allMoves = lateralMoves.concat(diagonalMoves);
+        return allMoves.filter(square => this.moveIsUnobstructed(board, square, true, allowTakeKing));
     }
 }

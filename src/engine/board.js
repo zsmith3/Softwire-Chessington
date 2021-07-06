@@ -83,7 +83,17 @@ export default class Board {
         this.pawnPromotionSquare = null;
     }
 
-    detectCheck(player) {
+    detectCheck(king) {
+        const kingSquare = this.findPiece(king);
+        for (let row = 0; row < this.board.length; row++) {
+            for (let col = 0; col < this.board[row].length; col++) {
+                const piece = this.board[row][col];
+                if (!piece || piece.player === king.player) continue;
+                if (piece.getAvailableMoves(this, true).some(square => square.equals(kingSquare))) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

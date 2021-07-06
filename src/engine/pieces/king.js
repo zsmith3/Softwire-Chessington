@@ -1,10 +1,14 @@
 import Piece from './piece';
 import Square from "../square";
+import Player from "../player";
 
 export default class King extends Piece {
     constructor(player) {
         super(player);
         this.pieceType = "king";
+        const playerStr = player === Player.WHITE ? 'White' : 'Black';
+        if (King.kings) King.kings[playerStr] = this;
+        else King.kings = {[playerStr]: this};
     }
 
     getCastleMove(board, currentSquare, rookCol, colNextToRook, targetCol) {
@@ -21,11 +25,11 @@ export default class King extends Piece {
         return castle1.concat(castle2);
     }
 
-    getAvailableMoves(board) {
+    getAvailableMoves(board, allowTakeKing) {
         const currentSquare = board.findPiece(this);
         const allMoves = this.getLateralMoves(board).concat(this.getDiagonalMoves(board));
         const adjacentMoves = allMoves.filter(square => square.isAdjacentTo(currentSquare));
-        const standardMoves = adjacentMoves.filter(square => this.canLandAt(board, square, true));
+        const standardMoves = adjacentMoves.filter(square => this.canLandAt(board, square, true, allowTakeKing));
         const castleMoves = this.getCastleMoves(board, currentSquare);
         return standardMoves.concat(castleMoves);
     }

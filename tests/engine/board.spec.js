@@ -50,7 +50,7 @@ describe('Board', () => {
         const pawn = new Pawn(Player.BLACK);
         board.setPiece(Square.at(1, 3), pawn);
 
-        board.detectCheck(Player.WHITE).should.equal(true);
+        board.detectCheck(king).should.equal(true);
     });
 
     it('can detect check from rook', () => {
@@ -60,7 +60,7 @@ describe('Board', () => {
         const rook = new Rook(Player.BLACK);
         board.setPiece(Square.at(3, 4), rook);
 
-        board.detectCheck(Player.WHITE).should.equal(true);
+        board.detectCheck(king).should.equal(true);
     });
 
     it('can detect check from bishop', () => {
@@ -70,7 +70,7 @@ describe('Board', () => {
         const bishop = new Bishop(Player.BLACK);
         board.setPiece(Square.at(2, 2), bishop);
 
-        board.detectCheck(Player.WHITE).should.equal(true);
+        board.detectCheck(king).should.equal(true);
     });
 
     it('can detect check from knight', () => {
@@ -80,7 +80,7 @@ describe('Board', () => {
         const knight = new Knight(Player.BLACK);
         board.setPiece(Square.at(1, 2), knight);
 
-        board.detectCheck(Player.WHITE).should.equal(true);
+        board.detectCheck(king).should.equal(true);
     });
 
     it('can detect check from queen laterally', () => {
@@ -90,7 +90,7 @@ describe('Board', () => {
         const queen = new Queen(Player.BLACK);
         board.setPiece(Square.at(3, 4), queen);
 
-        board.detectCheck(Player.WHITE).should.equal(true);
+        board.detectCheck(king).should.equal(true);
     });
 
     it('can detect check from queen diagonally', () => {
@@ -100,7 +100,7 @@ describe('Board', () => {
         const queen = new Queen(Player.BLACK);
         board.setPiece(Square.at(2, 6), queen);
 
-        board.detectCheck(Player.WHITE).should.equal(true);
+        board.detectCheck(king).should.equal(true);
     });
 
     it('does not detect check when king not under threat', () => {
@@ -110,6 +110,6 @@ describe('Board', () => {
         const pawn = new Pawn(Player.BLACK);
         board.setPiece(Square.at(1, 4), pawn);
 
-        board.detectCheck(Player.WHITE).should.equal(false);
+        board.detectCheck(king).should.equal(false);
     });
 });

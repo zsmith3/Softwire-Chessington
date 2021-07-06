@@ -12,5 +12,13 @@
   <body onload="chessington.createChessBoard()">
     <div id="chess-board"></div>
     <span id="turn-status"></span>
+    <br />
+    <div id="piece-chooser">
+      <h3>Choose a piece to promote pawn to:</h3>
+      <img src="img/chesspieces/wikipedia/wB.png" onclick="chessington.promotePawn('bishop')" />
+      <img src="img/chesspieces/wikipedia/wN.png" onclick="chessington.promotePawn('knight')" />
+      <img src="img/chesspieces/wikipedia/wR.png" onclick="chessington.promotePawn('rook')" />
+      <img src="img/chesspieces/wikipedia/wQ.png" onclick="chessington.promotePawn('queen')" />
+    </div>
   </body>
 </html>

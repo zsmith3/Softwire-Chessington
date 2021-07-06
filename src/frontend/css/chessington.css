@@ -5,3 +5,12 @@
 #turn-status {
     font-size: 20px;
 }
+
+#piece-chooser {
+    display: none;
+}
+
+#piece-chooser img {
+    background-color: #b58863;
+    cursor: pointer;
+}

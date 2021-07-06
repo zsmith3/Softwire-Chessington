@@ -1,12 +1,24 @@
 import Player from './player';
 import GameSettings from './gameSettings';
 import Square from './square';
+import Pawn from "./pieces/pawn";
+import Rook from "./pieces/rook";
+import King from "./pieces/king";
+import Knight from "./pieces/knight";
+import Queen from "./pieces/queen";
+import Bishop from "./pieces/bishop";
 
 export default class Board {
+    static createPiece(pieceType, player) {
+        const classes = {pawn: Pawn, rook: Rook, king: King, knight: Knight, queen: Queen, bishop: Bishop};
+        return new classes[pieceType](player);
+    }
+
     constructor(currentPlayer) {
         this.currentPlayer = currentPlayer ? currentPlayer : Player.WHITE;
         this.board = this.createBoard();
         this.lastMovedPiece = null;
+        this.pawnPromotionSquare = null;
     }
 
     createBoard() {
@@ -56,5 +68,18 @@ export default class Board {
         if (movingPiece.pieceType === "king" && movingPiece.detectCastle(this, fromSquare, toSquare)) {
             movingPiece.applyCastle(this, fromSquare, toSquare);
         }
+        if (movingPiece.pieceType === "pawn" && movingPiece.detectPromotion(this, fromSquare, toSquare)) {
+            document.getElementById("chess-board").style.pointerEvents = "none";
+            document.getElementById("piece-chooser").style.display = "block";
+            this.pawnPromotionSquare = toSquare;
+        }
+    }
+
+    promotePawn(pieceType) {
+        const newPiece = Board.createPiece(pieceType, (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE));
+        this.setPiece(this.pawnPromotionSquare, newPiece);
+        document.getElementById("chess-board").style.pointerEvents = "auto";
+        document.getElementById("piece-chooser").style.display = "none";
+        this.pawnPromotionSquare = null;
     }
 }

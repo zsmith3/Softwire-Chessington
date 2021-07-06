@@ -55,4 +55,8 @@ export default class Pawn extends Piece {
         if (rowDiff && colDiff && !this.canTakeAtSquare(board, toSquare)) return true;
         else return false;
     }
+
+    detectPromotion(board, fromSquare, toSquare) {
+        return [0, 7].includes(toSquare.row);
+    }
 }

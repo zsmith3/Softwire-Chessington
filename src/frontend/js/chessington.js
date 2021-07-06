@@ -110,6 +110,11 @@ function boardInStartingPosition() {
     return board;
 }
 
+export function promotePawn(pieceType) {
+    board.promotePawn(pieceType);
+    boardUI.position(boardToPositionObject(board));
+}
+
 export function createChessBoard() {
     board = boardInStartingPosition();
     boardUI = ChessBoard(

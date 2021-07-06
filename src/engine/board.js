@@ -41,9 +41,9 @@ export default class Board {
         if (!movingPiece) throw `No piece at square ${fromSquare}`;
         else if (movingPiece.player !== this.currentPlayer) throw "Cannot move piece belonging to wrong player";
         else {
+            this.specialMoveActions(movingPiece, fromSquare, toSquare);
             this.setPiece(toSquare, movingPiece);
             this.setPiece(fromSquare, undefined);
-            this.specialMoveActions(movingPiece, fromSquare, toSquare);
             this.currentPlayer = (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE);
             this.lastMovedPiece = movingPiece;
         }
@@ -52,6 +52,9 @@ export default class Board {
     specialMoveActions(movingPiece, fromSquare, toSquare) {
         if (movingPiece.pieceType === "pawn" && movingPiece.detectEnPassant(this, fromSquare, toSquare)) {
             this.setPiece(Square.at(fromSquare.row, toSquare.col), undefined);
+        }
+        if (movingPiece.pieceType === "king" && movingPiece.detectCastle(this, fromSquare, toSquare)) {
+            movingPiece.applyCastle(this, fromSquare, toSquare);
         }
     }
 }

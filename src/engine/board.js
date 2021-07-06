@@ -78,6 +78,7 @@ export default class Board {
     promotePawn(pieceType) {
         const newPiece = this.createPiece(pieceType, (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE));
         this.setPiece(this.pawnPromotionSquare, newPiece);
+        this.lastMovedPiece = newPiece;
         document.getElementById("chess-board").style.pointerEvents = "auto";
         document.getElementById("piece-chooser").style.display = "none";
         this.pawnPromotionSquare = null;

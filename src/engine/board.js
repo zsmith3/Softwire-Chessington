@@ -126,4 +126,19 @@ export default class Board {
 
         return newBoard;
     }
+
+    detectCheckMate(king) {
+        if (!this.detectCheck(king)) return false;
+
+        for (let row = 0; row < this.board.length; row++) {
+            for (let col = 0; col < this.board[row].length; col++) {
+                const piece = this.board[row][col];
+                if (!piece || piece.player !== king.player) continue;
+                if (piece.getAvailableMovesNoCheck(this).length) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

@@ -104,4 +104,30 @@ describe('Rook', () => {
 
         moves.filter(square => square.row !== 0).should.be.empty;
     });
+
+    it('moves when castling queenside', () => {
+        const king = new King(Player.WHITE, board);
+        const rook = new Rook(Player.WHITE);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 0), rook);
+
+        king.moveTo(board, Square.at(0, 2));
+
+        const piece = board.getPiece(Square.at(0, 3));
+
+        piece.should.equal(rook);
+    });
+
+    it('moves when castling kingside', () => {
+        const king = new King(Player.WHITE, board);
+        const rook = new Rook(Player.WHITE);
+        board.setPiece(Square.at(0, 4), king);
+        board.setPiece(Square.at(0, 7), rook);
+
+        king.moveTo(board, Square.at(0, 6));
+
+        const piece = board.getPiece(Square.at(0, 5));
+
+        piece.should.equal(rook);
+    });
 });

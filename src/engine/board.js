@@ -9,9 +9,9 @@ import Queen from "./pieces/queen";
 import Bishop from "./pieces/bishop";
 
 export default class Board {
-    static createPiece(pieceType, player) {
+    createPiece(pieceType, player) {
         const classes = {pawn: Pawn, rook: Rook, king: King, knight: Knight, queen: Queen, bishop: Bishop};
-        return new classes[pieceType](player);
+        return new classes[pieceType](player, this);
     }
 
     constructor(currentPlayer) {
@@ -76,7 +76,7 @@ export default class Board {
     }
 
     promotePawn(pieceType) {
-        const newPiece = Board.createPiece(pieceType, (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE));
+        const newPiece = this.createPiece(pieceType, (this.currentPlayer === Player.WHITE ? Player.BLACK : Player.WHITE));
         this.setPiece(this.pawnPromotionSquare, newPiece);
         document.getElementById("chess-board").style.pointerEvents = "auto";
         document.getElementById("piece-chooser").style.display = "none";
@@ -84,6 +84,7 @@ export default class Board {
     }
 
     detectCheck(king) {
+        if (!king) return false;
         const kingSquare = this.findPiece(king);
         for (let row = 0; row < this.board.length; row++) {
             for (let col = 0; col < this.board[row].length; col++) {
@@ -95,5 +96,34 @@ export default class Board {
             }
         }
         return false;
+    }
+
+    doesMoveCauseCheck(fromSquare, toSquare) {
+        const player = this.getPiece(fromSquare).player;
+        if (!this.kings) return false;
+        const newBoard = this.clone();
+        const king = newBoard.kings[player === Player.WHITE ? 'White' : 'Black'];
+        newBoard.movePiece(fromSquare, toSquare);
+        return newBoard.detectCheck(king);
+    }
+
+    clone () {
+        const newBoard = new Board(this.currentPlayer);
+
+        for (let row = 0; row < this.board.length; row++) {
+            for (let col = 0; col < this.board[row].length; col++) {
+                if (!!this.board[row][col]) {
+                    newBoard.board[row][col] = this.board[row][col].clone(newBoard);
+                }
+            }
+        }
+
+        if (this.lastMovedPiece) {
+            const lastMoveSquare = this.findPiece(this.lastMovedPiece);
+            newBoard.lastMovedPiece = newBoard.getPiece(lastMoveSquare);
+        }
+        newBoard.pawnPromotionSquare = this.pawnPromotionSquare;
+
+        return newBoard;
     }
 }

@@ -3,12 +3,12 @@ import Square from "../square";
 import Player from "../player";
 
 export default class King extends Piece {
-    constructor(player) {
+    constructor(player, board) {
         super(player);
         this.pieceType = "king";
         const playerStr = player === Player.WHITE ? 'White' : 'Black';
-        if (King.kings) King.kings[playerStr] = this;
-        else King.kings = {[playerStr]: this};
+        if (board.kings) board.kings[playerStr] = this;
+        else board.kings = {[playerStr]: this};
     }
 
     getCastleMove(board, currentSquare, rookCol, colNextToRook, targetCol) {

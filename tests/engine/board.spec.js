@@ -44,7 +44,7 @@ describe('Board', () => {
     });
 
     it('can detect check from pawn', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const pawn = new Pawn(Player.BLACK);
@@ -54,7 +54,7 @@ describe('Board', () => {
     });
 
     it('can detect check from rook', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const rook = new Rook(Player.BLACK);
@@ -64,7 +64,7 @@ describe('Board', () => {
     });
 
     it('can detect check from bishop', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const bishop = new Bishop(Player.BLACK);
@@ -74,7 +74,7 @@ describe('Board', () => {
     });
 
     it('can detect check from knight', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const knight = new Knight(Player.BLACK);
@@ -84,7 +84,7 @@ describe('Board', () => {
     });
 
     it('can detect check from queen laterally', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const queen = new Queen(Player.BLACK);
@@ -94,7 +94,7 @@ describe('Board', () => {
     });
 
     it('can detect check from queen diagonally', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const queen = new Queen(Player.BLACK);
@@ -104,7 +104,7 @@ describe('Board', () => {
     });
 
     it('does not detect check when king not under threat', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         board.setPiece(Square.at(0, 4), king);
 
         const pawn = new Pawn(Player.BLACK);

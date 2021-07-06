@@ -12,6 +12,12 @@ export default class Piece {
         throw new Error('This method must be implemented, and return a list of available moves');
     }
 
+    getAvailableMovesNoCheck(board) {
+        const currentSquare = board.findPiece(this);
+        const allMoves = this.getAvailableMoves(board);
+        return allMoves.filter(newSquare => !board.doesMoveCauseCheck(currentSquare, newSquare));
+    }
+
     moveTo(board, newSquare) {
         const currentSquare = board.findPiece(this);
         board.movePiece(currentSquare, newSquare);
@@ -75,5 +81,11 @@ export default class Piece {
             square = square.moveBy(rowDir, colDir);
         }
         return this.canLandAt(board, square, allowCapture, allowTakeKing);
+    }
+
+    clone(board) {
+        const newPiece = board.createPiece(this.pieceType, this.player);
+        newPiece.history = [...this.history];
+        return newPiece;
     }
 }

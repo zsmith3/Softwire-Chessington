@@ -16,7 +16,7 @@ describe('Bishop', () => {
         const bishop = new Bishop(Player.WHITE);
         board.setPiece(Square.at(2, 3), bishop);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         const expectedMoves = [
             // Forwards diagonal
@@ -32,7 +32,7 @@ describe('Bishop', () => {
         const bishop = new Bishop(Player.WHITE);
         board.setPiece(Square.at(2, 3), bishop);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.have.length(11);
     });
@@ -43,7 +43,7 @@ describe('Bishop', () => {
         board.setPiece(Square.at(4, 4), bishop);
         board.setPiece(Square.at(6, 6), friendlyPiece);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.not.deep.include(Square.at(7, 7));
     });
@@ -54,7 +54,7 @@ describe('Bishop', () => {
         board.setPiece(Square.at(4, 4), bishop);
         board.setPiece(Square.at(6, 6), opposingPiece);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.not.deep.include(Square.at(7, 7));
     });
@@ -65,18 +65,18 @@ describe('Bishop', () => {
         board.setPiece(Square.at(4, 4), bishop);
         board.setPiece(Square.at(6, 6), opposingPiece);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.deep.include(Square.at(6, 6));
     });
 
     it('cannot take opposing king', () => {
         const bishop = new Bishop(Player.WHITE);
-        const opposingPiece = new King(Player.BLACK);
+        const opposingPiece = new King(Player.BLACK, board);
         board.setPiece(Square.at(4, 4), bishop);
         board.setPiece(Square.at(6, 6), opposingPiece);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.not.deep.include(Square.at(6, 6));
     });
@@ -87,20 +87,20 @@ describe('Bishop', () => {
         board.setPiece(Square.at(4, 4), bishop);
         board.setPiece(Square.at(6, 6), friendlyPiece);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.not.deep.include(Square.at(6, 6));
     });
 
     it('cannot move into check', () => {
-        const king = new King(Player.WHITE);
+        const king = new King(Player.WHITE, board);
         const bishop = new Bishop(Player.WHITE);
         const opposingPiece = new Rook(Player.BLACK);
         board.setPiece(Square.at(0, 4), king);
         board.setPiece(Square.at(0, 3), bishop);
         board.setPiece(Square.at(0, 1), opposingPiece);
 
-        const moves = bishop.getAvailableMoves(board);
+        const moves = bishop.getAvailableMovesNoCheck(board);
 
         moves.should.be.empty;
     });

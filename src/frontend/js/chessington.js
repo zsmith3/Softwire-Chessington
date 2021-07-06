@@ -65,7 +65,7 @@ function onDrop(source, target) {
     const toSquare = positionStringToSquare(target);
     const pieceToMove = board.getPiece(fromSquare);
     
-    if (!pieceToMove || !pieceToMove.getAvailableMoves(board).some(square => square.equals(toSquare))) {
+    if (!pieceToMove || !pieceToMove.getAvailableMovesNoCheck(board).some(square => square.equals(toSquare))) {
         return 'snapback';
     }
     pieceToMove.moveTo(board, toSquare);
@@ -80,7 +80,7 @@ function updateStatus() {
     for (let player of [Player.WHITE, Player.BLACK]) {
         const playerStr = player === Player.WHITE ? 'White' : 'Black';
         const checkStatus = document.getElementById('check-status');
-        if (board.detectCheck(King.kings[playerStr])) {
+        if (board.detectCheck(board.kings[playerStr])) {
             checkStatus.innerHTML = `${playerStr} in check`;
             break;
         } else checkStatus.innerHTML = '';
@@ -113,8 +113,8 @@ function boardInStartingPosition() {
     board.setPiece(Square.at(0, 3), new Queen(Player.WHITE));
     board.setPiece(Square.at(7, 3), new Queen(Player.BLACK));
 
-    board.setPiece(Square.at(0, 4), new King(Player.WHITE));
-    board.setPiece(Square.at(7, 4), new King(Player.BLACK));
+    board.setPiece(Square.at(0, 4), new King(Player.WHITE, board));
+    board.setPiece(Square.at(7, 4), new King(Player.BLACK, board));
 
     return board;
 }

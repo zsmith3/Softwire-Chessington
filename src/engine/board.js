@@ -103,7 +103,7 @@ export default class Board {
         if (!this.kings) return false;
         const newBoard = this.clone();
         const king = newBoard.kings[player === Player.WHITE ? 'White' : 'Black'];
-        newBoard.movePiece(fromSquare, toSquare);
+        newBoard.getPiece(fromSquare).moveTo(newBoard, toSquare);
         return newBoard.detectCheck(king);
     }
 
